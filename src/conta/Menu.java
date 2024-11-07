@@ -50,82 +50,84 @@ public class Menu {
 
 				switch (opcao) {
 
-				case 1 -> {
-					criarConta();
-					System.out.println(Cores.TEXT_GREEN + "Conta cadastrada com sucesso!");
-				}
-
-				case 2 -> listarContas();
-
-				case 3 -> {
-					input();
-					listarContaPorNumero(agencia, numeroConta).visualizar();;			
-				}
-				case 4 -> System.out.println("Atualizar dados da Conta\n");
-
-				case 5 -> {
-					input();
-					apagar(agencia, numeroConta);
-				}
-
-				case 6 -> {
-					
-					input();
-					float valorSaque = Float.parseFloat(ler("Digite o valor que deseja sacar: "));
-
-					if (valorSaque < 0)
-						throw new RegraDeNegocioException("O valor do Saque não pode ser negativo!");
-
-					sacar(agencia, numeroConta, valorSaque);
-					System.out.println(Cores.TEXT_GREEN + "Saque Realizado com sucesso!");
-				}
-
-				case 7 -> {
-					
-					input();
-					float valorDeposito = Float.parseFloat(ler("Digite o valor que deseja depositar: "));
-
-					if (valorDeposito < 0)
-						throw new RegraDeNegocioException("O valor do deposito não pode ser negativo!");
-
-					depositar(agencia, numeroConta, valorDeposito);
-					System.out.println(Cores.TEXT_GREEN + "Deposito Realizado com sucesso!");
-				}
-
-				case 8 -> {
-					
-					float valorTransferencia = Float.parseFloat(ler("Digite o valor que deseja transferir: "));
-
-					if (valorTransferencia < 0)
-						throw new RegraDeNegocioException("O valor da transferencia não pode ser negativo!");
-					
-					System.out.println("CONTA REMETENTE");
-					input();
-					Conta contaSaida = listarContaPorNumero(agencia, numeroConta);
-					
-					System.out.printf("\nConta: %d | Agencia: %d | Saldo: %f | Titular: %s\n\n", 
-							contaSaida.getNumero(), contaSaida.getAgencia(), contaSaida.getSaldo(), contaSaida.getTitular());
-				
-				
-					System.out.println("CONTA DESTINO");
-					input();
-					
-					Conta contaDestino = listarContaPorNumero(agencia, numeroConta);
+					case 1 -> {
+						criarConta();
+						System.out.println(Cores.TEXT_GREEN + "Conta cadastrada com sucesso!");
+					}
+	
+					case 2 -> listarContas();
+	
+					case 3 -> {
+						input();
+						listarContaPorNumero(agencia, numeroConta).visualizar();;			
+					}
+					case 4 -> {
+						input();
+						atualizarDados();
+					}
+	
+					case 5 -> {
+						input();
+						apagar(agencia, numeroConta);
+					}
+	
+					case 6 -> {
+						input();
+						float valorSaque = Float.parseFloat(ler("Digite o valor que deseja sacar: "));
+	
+						if (valorSaque < 0)
+							throw new RegraDeNegocioException("O valor do Saque não pode ser negativo!");
+	
+						sacar(agencia, numeroConta, valorSaque);
+						System.out.println(Cores.TEXT_GREEN + "Saque Realizado com sucesso!");
+					}
+	
+					case 7 -> {
+						
+						input();
+						float valorDeposito = Float.parseFloat(ler("Digite o valor que deseja depositar: "));
+	
+						if (valorDeposito < 0)
+							throw new RegraDeNegocioException("O valor do deposito não pode ser negativo!");
+	
+						depositar(agencia, numeroConta, valorDeposito);
+						System.out.println(Cores.TEXT_GREEN + "Deposito Realizado com sucesso!");
+					}
+	
+					case 8 -> {
+						
+						float valorTransferencia = Float.parseFloat(ler("Digite o valor que deseja transferir: "));
+	
+						if (valorTransferencia < 0)
+							throw new RegraDeNegocioException("O valor da transferencia não pode ser negativo!");
+						
+						System.out.println("CONTA REMETENTE");
+						input();
+						Conta contaSaida = listarContaPorNumero(agencia, numeroConta);
+						
+						System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n\n", 
+								contaSaida.getNumero(), contaSaida.getAgencia(), contaSaida.getSaldo(), contaSaida.getTitular());
 					
 					
-					System.out.printf("\nConta: %d | Agencia: %d | Saldo: %f | Titular: %s\n", 
-							contaDestino.getNumero(), contaDestino.getAgencia(), contaDestino.getSaldo(), contaDestino.getTitular());
-					
-					transferir(contaSaida, contaDestino, valorTransferencia);
-				}
-
-				default -> System.out.println("\nOpção Inválida!\n");
+						System.out.println("CONTA DESTINO");
+						input();
+						
+						Conta contaDestino = listarContaPorNumero(agencia, numeroConta);
+						
+						
+						System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n", 
+								contaDestino.getNumero(), contaDestino.getAgencia(), contaDestino.getSaldo(), contaDestino.getTitular());
+						
+						transferir(contaSaida, contaDestino, valorTransferencia);
+					}
+	
+					default -> System.out.println("\nOpção Inválida!\n");
 
 				}
 			} catch (RegraDeNegocioException exception) {
 				System.out.println(Cores.TEXT_RED + "Erro: " + exception.getMessage().toUpperCase());
-				System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu");
-				scan.next();
+				System.out.println("Pressione ENTER para voltar ao menu");
+				scan.nextLine();
 			}
 
 		}
@@ -152,11 +154,17 @@ public class Menu {
 		} catch (NumberFormatException exception) {
 			throw new RegraDeNegocioException("Entrada de dados invalida!");
 		}
-
+		
 		String titular = ler("Digite o nome do titular da conta: ");
-
+		
 		Conta conta = new Conta(numero, agencia, tipo, titular, 1000f);
+		
+		if(contas.contains(conta)) {
+			throw new RegraDeNegocioException("Conta já cadastrada!");
+		}
+		
 		conta.visualizar();
+		
 		contas.add(conta);
 
 	}
@@ -166,6 +174,7 @@ public class Menu {
 		if (contas.isEmpty())
 			throw new RegraDeNegocioException("Nenhuma conta cadastrada!");
 		
+		System.out.println("\nTotal de Contas Cadastradas: " + contas.size());
 		contas.forEach(conta -> conta.visualizar());
 
 	}
@@ -180,7 +189,30 @@ public class Menu {
 		throw new RegraDeNegocioException("Conta não encontrada!");
 	}
 	
-	public static void atualizarDados(int agencia, int numeroConta) {
+	public static void atualizarDados() {
+		
+		Conta conta = listarContaPorNumero(agencia, numeroConta);
+		int tipo;
+		String titular;
+		
+		System.out.println("\nAtualizando dados");
+		
+		try {
+			agencia = Integer.parseInt(ler("Digite o numero da agencia: "));
+			tipo = Integer.parseInt(ler("Digite o tipo da conta: "));
+			titular = ler("Digite o nome do titular: ");
+			
+			if(titular.isEmpty()) {
+				throw new RegraDeNegocioException("Nome do titular não pode estar vazio!");
+			}
+
+		}catch(RegraDeNegocioException | NumberFormatException e) {
+		
+			throw new RegraDeNegocioException(e.getMessage());
+		}
+		
+		conta.atualizar(agencia, tipo, titular);
+		System.out.println(Cores.TEXT_GREEN + "Dados atualizados com sucesso!");
 		
 	}
 	
@@ -188,14 +220,13 @@ public class Menu {
 		
 		Conta conta = listarContaPorNumero(agencia, numeroConta);
 		
-		System.out.printf("\nConta: %d | Agencia: %d | Saldo: %f | Titular: %s\n", conta.getNumero(), conta.getAgencia(), conta.getSaldo(), conta.getTitular());
+		System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n", conta.getNumero(), conta.getAgencia(), conta.getSaldo(), conta.getTitular());
 		
-		if(conta.getSaldo() > 0.0f)
+		if(conta.getSaldo() > 0.01f) {
 			throw new RegraDeNegocioException("A conta não pode ser encerrada. Saque todo valor e tente novamente!");
-		
+		}
 		System.out.printf(Cores.TEXT_RED + "\nTem certeza que deseja excluir a conta ?" + Cores.TEXT_RESET+
 				"\nConta: %d | Agencia: %d | Titular: %s\n\n", conta.getNumero(), conta.getAgencia(), conta.getTitular());
-		
 		
 		switch(Integer.parseInt(ler("Digite '1 - SIM' ou '2 - NAO': "))) {
 			
@@ -205,7 +236,7 @@ public class Menu {
 				return true;
 			}
 			case 2 -> {
-				System.out.println("Opercao cancelada!");
+				System.out.println("Operacao cancelada!");
 				return false;	
 			}
 			default -> {
@@ -214,14 +245,15 @@ public class Menu {
 			}
 		}
 	}
-
 	public static boolean sacar(int agencia, int numeroConta, float valor) {
 
 		Conta conta = listarContaPorNumero(agencia, numeroConta);
-
+		
+		System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n", 
+				conta.getNumero(), conta.getAgencia(), conta.getSaldo(), conta.getTitular());
+		
 		if (conta.getSaldo() >= valor) {
 			conta.sacar(valor);
-			System.out.printf("\nNovo saldo: %.2f\n", conta.getSaldo());
 			return true;
 		}
 		System.out.printf("\nSaldo Atual: %.2f | Valor Solicitado: %.2f\n\n", conta.getSaldo(), valor);
@@ -231,10 +263,11 @@ public class Menu {
 	public static void depositar(int agencia, int numeroConta, float valor) {
 		
 		Conta conta = listarContaPorNumero(agencia, numeroConta);
-
-		conta.depositar(valor);
 		
-		System.out.printf("\nNovo saldo: %.2f\n", conta.getSaldo());
+		System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n", 
+				conta.getNumero(), conta.getAgencia(), conta.getSaldo(), conta.getTitular());
+		
+		conta.depositar(valor);
 			
 	}
 	

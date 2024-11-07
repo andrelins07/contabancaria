@@ -17,13 +17,21 @@ public class Conta {
 		this.titular = titular;
 		this.saldo = saldo;
 	}
+	public void atualizar(int agencia, int tipo, String titular) {
+		
+		if(this.agencia != agencia) {
+			this.agencia = agencia;
+		}
+		if(this.tipo != tipo) {
+			this.tipo = tipo;
+		}
+		if(!this.titular.equals(titular)) {
+			this.titular = titular;
+		}
+	}
 
 	public int getNumero() {
 		return numero;
-	}
-
-	public void setNumero(int numero) {
-		this.numero = numero;
 	}
 
 	public int getAgencia() {
@@ -38,16 +46,8 @@ public class Conta {
 		return tipo;
 	}
 
-	public void setTipo(int tipo) {
-		this.tipo = tipo;
-	}
-
 	public String getTitular() {
 		return titular;
-	}
-
-	public void setTitular(String titular) {
-		this.titular = titular;
 	}
 
 	public float getSaldo() {
@@ -96,7 +96,7 @@ public class Conta {
 		if (getClass() != obj.getClass())
 			return false;
 		Conta other = (Conta) obj;
-		return agencia == other.agencia && numero == other.numero && tipo == other.tipo;
+		return agencia == other.agencia && numero == other.numero;
 	}
 	
 }
