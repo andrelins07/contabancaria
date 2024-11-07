@@ -2,6 +2,8 @@ package conta;
 
 import java.util.Scanner;
 import conta.util.Cores;
+import conta.model.Conta;;
+
 public class Menu {
 
 	public static void main(String[] args) {
@@ -14,7 +16,7 @@ public class Menu {
 			***************************************************
 					BANCO DO BRASIL COM Z
 			***************************************************
-				
+				0 - Testes
 				1 - Criar Conta
 				2 - Listar todas as contas
 				3 - Bucar Conta por numero
@@ -56,6 +58,7 @@ public class Menu {
 				case 7 -> System.out.println("Depósito\n");
 
 				case 8 -> System.out.println("Transferência entre Contas\n");
+				case 0 -> testes();
 
 				default -> System.out.println("\nOpção Inválida!\n");
 					
@@ -63,6 +66,22 @@ public class Menu {
 			
 		}
 		
+	}
+	public static void testes() {
+	
+		Conta conta = new Conta(2575, 47166, 1, "Andre Lins", 2400.00f);
+		System.out.println("Conta criada");
+		conta.visualizar();
+		System.out.printf("\nSacando: %.2f\n", 130.0f);
+		conta.sacar(130.0f);
+		System.out.printf("\nNovo saldo: %.2f\n", conta.getSaldo());
+		conta.visualizar();
+		System.out.printf("\nDepositando: %.2f\n", 600.0f);
+		conta.depositar(600f);
+		System.out.printf("\nNovo saldo: %.2f", conta.getSaldo());
+		conta.visualizar();
+		
+	
 	}
 	
 	public static void sobre() {
