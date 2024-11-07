@@ -133,6 +133,7 @@ public class Menu {
 		}
 
 	}
+
 	public static void input() {
 		
 		try {
@@ -245,6 +246,7 @@ public class Menu {
 			}
 		}
 	}
+	
 	public static boolean sacar(int agencia, int numeroConta, float valor) {
 
 		Conta conta = listarContaPorNumero(agencia, numeroConta);
@@ -253,8 +255,7 @@ public class Menu {
 				conta.getNumero(), conta.getAgencia(), conta.getSaldo(), conta.getTitular());
 		
 		if (conta.getSaldo() >= valor) {
-			conta.sacar(valor);
-			return true;
+			return conta.sacar(valor);
 		}
 		System.out.printf("\nSaldo Atual: %.2f | Valor Solicitado: %.2f\n\n", conta.getSaldo(), valor);
 		throw new RegraDeNegocioException("Saque não realizado. Saldo insulficiente!");
