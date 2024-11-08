@@ -58,21 +58,21 @@ public class Menu {
 					case 2 -> listarContas();
 	
 					case 3 -> {
-						input();
+						lerAgenciaEConta();
 						listarContaPorNumero(agencia, numeroConta).visualizar();;			
 					}
 					case 4 -> {
-						input();
-						atualizarDados();
+						lerAgenciaEConta();
+						atualizarDadosConta();
 					}
 	
 					case 5 -> {
-						input();
-						apagar(agencia, numeroConta);
+						lerAgenciaEConta();
+						apagarConta(agencia, numeroConta);
 					}
 	
 					case 6 -> {
-						input();
+						lerAgenciaEConta();
 						float valorSaque = Float.parseFloat(ler("Digite o valor que deseja sacar: "));
 	
 						if (valorSaque < 0)
@@ -84,7 +84,7 @@ public class Menu {
 	
 					case 7 -> {
 						
-						input();
+						lerAgenciaEConta();
 						float valorDeposito = Float.parseFloat(ler("Digite o valor que deseja depositar: "));
 	
 						if (valorDeposito < 0)
@@ -102,7 +102,7 @@ public class Menu {
 							throw new RegraDeNegocioException("O valor da transferencia não pode ser negativo!");
 						
 						System.out.println("CONTA REMETENTE");
-						input();
+						lerAgenciaEConta();
 						Conta contaSaida = listarContaPorNumero(agencia, numeroConta);
 						
 						System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n\n", 
@@ -110,7 +110,7 @@ public class Menu {
 					
 					
 						System.out.println("CONTA DESTINO");
-						input();
+						lerAgenciaEConta();
 						
 						Conta contaDestino = listarContaPorNumero(agencia, numeroConta);
 						
@@ -134,7 +134,7 @@ public class Menu {
 
 	}
 
-	public static void input() {
+	public static void lerAgenciaEConta() {
 		
 		try {
 			agencia = Integer.parseInt(ler("Digite o numero da agencia: "));
@@ -190,7 +190,7 @@ public class Menu {
 		throw new RegraDeNegocioException("Conta não encontrada!");
 	}
 	
-	public static void atualizarDados() {
+	public static void atualizarDadosConta() {
 		
 		Conta conta = listarContaPorNumero(agencia, numeroConta);
 		int tipo;
@@ -217,11 +217,11 @@ public class Menu {
 		
 	}
 	
-	public static boolean apagar(int agencia, int numeroConta) {
+	public static boolean apagarConta(int agencia, int numeroConta) {
 		
 		Conta conta = listarContaPorNumero(agencia, numeroConta);
 		
-		System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n", conta.getNumero(), conta.getAgencia(), conta.getSaldo(), conta.getTitular());
+		System.out.printf("\nConta: %d | Agencia: %d | Saldo: %f | Titular: %s\n", conta.getNumero(), conta.getAgencia(), conta.getSaldo(), conta.getTitular());
 		
 		if(conta.getSaldo() > 0.01f) {
 			throw new RegraDeNegocioException("A conta não pode ser encerrada. Saque todo valor e tente novamente!");
@@ -253,7 +253,7 @@ public class Menu {
 		
 		System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n", 
 				conta.getNumero(), conta.getAgencia(), conta.getSaldo(), conta.getTitular());
-		
+		//Fazer arredondamento com a biblioteca math
 		if (conta.getSaldo() >= valor) {
 			return conta.sacar(valor);
 		}
