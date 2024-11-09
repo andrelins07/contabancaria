@@ -1,4 +1,4 @@
-package controller;
+package conta.controller;
 
 import java.util.Scanner;
 import conta.exception.RegraDeNegocioException;

@@ -2,7 +2,7 @@ package conta;
 
 import java.util.Scanner;
 import conta.util.Cores;
-import controller.ContaController;
+import conta.controller.ContaController;
 import conta.exception.RegraDeNegocioException;
 
 public class Menu{
