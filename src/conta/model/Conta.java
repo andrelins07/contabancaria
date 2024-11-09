@@ -53,7 +53,9 @@ public class Conta {
 	public float getSaldo() {
 		return saldo;
 	}
-
+	public void setSaldo(float saldo) {
+		this.saldo = saldo;
+	}
 	public boolean sacar(float valor) {
 		
 		if(this.saldo >= valor) {
@@ -80,11 +82,11 @@ public class Conta {
 			break;
 		}
 		System.out.printf("""
-		\n***************************************************
+		\n****************************************************************
 		Dados da Conta:
-		***************************************************
+		****************************************************************
 		Numero da conta: %d | Agência: %d | Tipo da Conta: %s
-		Saldo: %.2f | Titular: %s\n""", this.numero, this.agencia, tipo, this.saldo, this.titular);
+		Saldo: %.2f | Titular: %s\n\n""", this.numero, this.agencia, tipo, this.saldo, this.titular);
 	}
 
 	@Override
