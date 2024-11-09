@@ -1,7 +1,8 @@
 package conta.controller;
 
 import java.util.Scanner;
-import conta.exception.RegraDeNegocioException;
+
+import conta.exception.EntradaInvalidaException;
 import conta.model.Conta;
 import conta.service.ContaService;
 import conta.util.Cores;
@@ -24,7 +25,7 @@ public class ContaController {
 			tipo = Integer.parseInt(leitura("Digite o tipo da sua conta:\n1 - Conta Corrente | 2 - Conta Poupança\n"));
 
 		} catch (NumberFormatException exception) {
-			throw new RegraDeNegocioException("Entrada de dados invalida! Digite apenas numeros.");
+			throw new EntradaInvalidaException();
 		}
 		String titular = leitura("Digite o nome do titular da conta:  ");
 		
@@ -53,7 +54,7 @@ public class ContaController {
 			agencia = Integer.parseInt(leitura("Digite o numero da agencia: "));
 			tipo = Integer.parseInt(leitura("Digite o tipo da conta: "));
 		} catch (NumberFormatException e) {
-			throw new RegraDeNegocioException("Entrada de dados invalida! Digite apenas numeros.");
+			throw new EntradaInvalidaException();
 		}
 		String titular = leitura("Digite o nome do titular: ");
 
@@ -79,7 +80,7 @@ public class ContaController {
 		try {
 			opcao = Integer.parseInt(leitura("Digite '1 - ' ou '2 - NAO':\n"));
 		} catch (NumberFormatException e) {
-			throw new RegraDeNegocioException("Entrada de dados invalida! Digite apenas numeros.");
+			throw new EntradaInvalidaException();
 		}
 
 		switch (opcao) {
@@ -154,7 +155,7 @@ public class ContaController {
 			agencia = Integer.parseInt(leitura("Digite o numero da agencia:  "));
 			numeroConta = Integer.parseInt(leitura("Digite o numero da conta:  "));
 		} catch (NumberFormatException exception) {
-			throw new RegraDeNegocioException("Entrada de dados invalida! Digite apenas numeros.");
+			throw new EntradaInvalidaException();
 		}
 	}
 
@@ -168,8 +169,7 @@ public class ContaController {
 		float valorDeposito = Float.parseFloat(leitura(mensagem));
 
 		if (valorDeposito < 0)
-			throw new RegraDeNegocioException("O valor não pode ser negativo!");
-
+			throw new EntradaInvalidaException(valorDeposito);
 		return valorDeposito;
 	}
 	

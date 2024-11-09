@@ -1,7 +1,7 @@
 package conta.service;
 
 import java.util.ArrayList;
-import conta.exception.RegraDeNegocioException;
+import conta.exception.*;
 import conta.model.Conta;
 
 public class ContaService {
@@ -11,13 +11,16 @@ public class ContaService {
 	public void criarConta(Conta conta) {
 
 		if (contas.contains(conta)) {
-			throw new RegraDeNegocioException("Conta já cadastrada!");
+			throw new ContaJaCadastradaException("Conta já cadastrada!");
 		}
 		if (conta.getAgencia() < 0 || conta.getNumero() < 0) {
-			throw new RegraDeNegocioException("O numero da agencia e da conta não pode ser negativo!");
+			throw new EntradaInvalidaException("O numero da agencia e da conta não pode ser negativo!");
 		}
 		if (conta.getTitular().isEmpty()) {
-			throw new RegraDeNegocioException("Nome do titular vazio!Por favor, preencha todos os dados");
+			throw new EntradaVaziaException("Titular");
+		}
+		if (conta.getTipo() != 1 || conta.getTipo() != 2) {
+			throw new EntradaInvalidaException("Tipo de conta inválido!");
 		}
 		contas.add(conta);
 	}
@@ -25,7 +28,7 @@ public class ContaService {
 	public void listarContas() {
 
 		if (contas.isEmpty())
-			throw new RegraDeNegocioException("Nenhuma conta cadastrada!");
+			throw new ContaNaoEncontradaException("Nenhuma conta cadastrada!");
 
 		System.out.println("\nTotal de Contas Cadastradas: " + contas.size());
 
@@ -40,19 +43,19 @@ public class ContaService {
 				return conta;
 			}
 		}
-		throw new RegraDeNegocioException("Conta não encontrada!");
+		throw new ContaNaoEncontradaException("Conta não encontrada!");
 	}
 
 	public void atualizarDadosConta(Conta conta, int agencia, int tipo, String titular) {
 
 		if (agencia < 0) {
-			throw new RegraDeNegocioException("O numero da agencia e da conta não pode ser negativo!");
+			throw new EntradaInvalidaException("O numero da agencia e da conta não pode ser negativo!");
 		}
 		if (conta.getTitular().isEmpty()) {
-			throw new RegraDeNegocioException("Nome do titular vazio!Por favor, preencha todos os dados");
+			throw new EntradaVaziaException("Titular");
 		}
 		if (tipo != 1 || tipo != 2) {
-			throw new RegraDeNegocioException("Tipo de conta inválido!");
+			throw new EntradaInvalidaException("Tipo de conta inválido!");
 		}
 
 		conta.atualizar(agencia, tipo, titular);
@@ -74,11 +77,11 @@ public class ContaService {
 	public void sacar(Conta conta, float valorSaque) {
 
 		if(valorSaque < 0) {
-			throw new RegraDeNegocioException("Valor do saque não pode ser negativo!");
+			throw new EntradaInvalidaException(valorSaque);
 		}
 		
 		if (conta.getSaldo() < valorSaque) {
-			throw new RegraDeNegocioException("Saldo insulficiente!");
+			throw new SaldoInsuficienteException(conta.getSaldo(), valorSaque);
 		}
 		conta.sacar(valorSaque);
 		
@@ -87,7 +90,7 @@ public class ContaService {
 	public void depositar(Conta conta, float valorDeposito) {
 
 		if(valorDeposito < 0) {
-			throw new RegraDeNegocioException("Valor do deposito não pode ser negativo!");
+			throw new EntradaInvalidaException(valorDeposito);
 		}
 
 		conta.depositar(valorDeposito);

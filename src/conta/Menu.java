@@ -5,15 +5,15 @@ import conta.util.Cores;
 import conta.controller.ContaController;
 import conta.exception.RegraDeNegocioException;
 
-public class Menu{
+public class Menu {
 
 	public static void main(String[] args) {
 
 		Scanner scan = new Scanner(System.in);
 		ContaController contaController = new ContaController(scan);
-	
+
 		while (true) {
-			
+
 			System.out.print(Cores.TEXT_YELLOW + """
 					***************************************************
 							BANCO DO BRASIL COM Z
@@ -29,8 +29,9 @@ public class Menu{
 					9 - Sair
 					***************************************************
 					""" + Cores.TEXT_RESET);
-			
-			System.out.print(Cores.ANSI_BLACK_BACKGROUND + Cores.TEXT_YELLOW  + "Digite a opcao Desejada: " +  Cores.TEXT_RESET);
+
+			System.out.print(
+					Cores.ANSI_BLACK_BACKGROUND + Cores.TEXT_YELLOW + "Digite a opcao Desejada: " + Cores.TEXT_RESET);
 			int opcao = scan.nextInt();
 			scan.skip("\\R?");
 			System.out.println();
@@ -41,7 +42,6 @@ public class Menu{
 				scan.close();
 				break;
 			}
-
 			try {
 
 				switch (opcao) {
@@ -49,13 +49,13 @@ public class Menu{
 				case 1 -> contaController.criarConta();
 
 				case 2 -> contaController.listarContas();
-				
+
 				case 3 -> contaController.listarContaPorNumero();
-					
+
 				case 4 -> contaController.atualizarDadosConta();
-				
+
 				case 5 -> contaController.apagarConta();
-				
+
 				case 6 -> contaController.sacar();
 
 				case 7 -> contaController.depositar();
@@ -74,6 +74,7 @@ public class Menu{
 		}
 
 	}
+
 	public static void sobre() {
 
 		System.out.println(Cores.TEXT_BLUE + """
