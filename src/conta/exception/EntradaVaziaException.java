@@ -6,4 +6,8 @@ public class EntradaVaziaException extends RegraDeNegocioException{
 		super("Alguns dados não foram preenchidos: " + variavel + ".\nPreenchimento é obrigatório");
 	}
 	
+	public EntradaVaziaException() {
+		super("Dados obrigatórios não preenchidos!");
+	}
+	
 }

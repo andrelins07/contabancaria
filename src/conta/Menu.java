@@ -10,7 +10,7 @@ public class Menu {
 	public static void main(String[] args) {
 
 		Scanner scan = new Scanner(System.in);
-		ContaController contaController = new ContaController(scan);
+		ContaController contaController = new ContaController();
 
 		while (true) {
 

@@ -13,15 +13,6 @@ public class ContaService {
 		if (contas.contains(conta)) {
 			throw new ContaJaCadastradaException("Conta já cadastrada!");
 		}
-		if (conta.getAgencia() < 0 || conta.getNumero() < 0) {
-			throw new EntradaInvalidaException("O numero da agencia e da conta não pode ser negativo!");
-		}
-		if (conta.getTitular().isEmpty()) {
-			throw new EntradaVaziaException("Titular");
-		}
-		if (conta.getTipo() != 1 || conta.getTipo() != 2) {
-			throw new EntradaInvalidaException("Tipo de conta inválido!");
-		}
 		contas.add(conta);
 	}
 
@@ -48,16 +39,6 @@ public class ContaService {
 
 	public void atualizarDadosConta(Conta conta, int agencia, int tipo, String titular) {
 
-		if (agencia < 0) {
-			throw new EntradaInvalidaException("O numero da agencia e da conta não pode ser negativo!");
-		}
-		if (conta.getTitular().isEmpty()) {
-			throw new EntradaVaziaException("Titular");
-		}
-		if (tipo != 1 || tipo != 2) {
-			throw new EntradaInvalidaException("Tipo de conta inválido!");
-		}
-
 		conta.atualizar(agencia, tipo, titular);
 	}
 
@@ -83,6 +64,7 @@ public class ContaService {
 		if (conta.getSaldo() < valorSaque) {
 			throw new SaldoInsuficienteException(conta.getSaldo(), valorSaque);
 		}
+		
 		conta.sacar(valorSaque);
 		
 	}

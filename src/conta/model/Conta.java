@@ -59,14 +59,18 @@ public class Conta {
 	public boolean sacar(float valor) {
 		
 		if(this.saldo >= valor) {
-			this.saldo -= valor;
+			float saldoArredondado = (float) Math.round((this.getSaldo() - valor )* 100)/100f;
+			this.setSaldo(saldoArredondado);
 			return true;
 		}
 		return false;
 	}
 
 	public void depositar(float valor) {
-		this.saldo += valor;
+		
+		float saldoArredondado = (float) Math.round((this.getSaldo() + valor )* 100)/100f;
+		this.setSaldo(saldoArredondado);
+	
 	}
 
 	public void visualizar() {
