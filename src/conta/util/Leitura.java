@@ -52,5 +52,8 @@ public class Leitura {
 		return variavel;
 		
 	}
+	public static void voltarMenu() {
+		scan.nextLine();
+	}
 
 }

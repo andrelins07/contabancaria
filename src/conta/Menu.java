@@ -1,7 +1,7 @@
 package conta;
 
-import java.util.Scanner;
 import conta.util.Cores;
+import conta.util.Leitura;
 import conta.controller.ContaController;
 import conta.exception.RegraDeNegocioException;
 
@@ -9,7 +9,6 @@ public class Menu {
 
 	public static void main(String[] args) {
 
-		Scanner scan = new Scanner(System.in);
 		ContaController contaController = new ContaController();
 
 		while (true) {
@@ -29,20 +28,15 @@ public class Menu {
 					9 - Sair
 					***************************************************
 					""" + Cores.TEXT_RESET);
-
-			System.out.print(
-					Cores.ANSI_BLACK_BACKGROUND + Cores.TEXT_YELLOW + "Digite a opcao Desejada: " + Cores.TEXT_RESET);
-			int opcao = scan.nextInt();
-			scan.skip("\\R?");
-			System.out.println();
-
-			if (opcao == 9) {
-				System.out.println("\nBanco do Brazil com Z - O seu Futuro começa aqui!");
-				sobre();
-				scan.close();
-				break;
-			}
 			try {
+				
+				int opcao = Leitura.lerInteiro(Cores.ANSI_BLACK_BACKGROUND + Cores.TEXT_YELLOW + "Digite a opcao Desejada: " + Cores.TEXT_RESET);
+				System.out.println();
+				if (opcao == 9) {
+					System.out.println("\nBanco do Brazil com Z - O seu Futuro começa aqui!");
+					sobre();
+					break;
+				}
 
 				switch (opcao) {
 
@@ -68,7 +62,7 @@ public class Menu {
 			} catch (RegraDeNegocioException exception) {
 				System.out.println(Cores.TEXT_RED + "Erro: " + exception.getMessage().toUpperCase());
 				System.out.println("Pressione ENTER para voltar ao menu");
-				scan.nextLine();
+				Leitura.voltarMenu();
 			}
 
 		}
