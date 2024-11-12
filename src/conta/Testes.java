@@ -13,7 +13,7 @@ public class Testes {
 		
 		int numero = Leitura.lerInteiro("Digite o numero: ");
 		
-		if (!(numero == 1) || !(numero == 2)) {
+		if (numero != 1 && numero != 2) {
 			throw new EntradaInvalidaException("Tipo de conta inválido!");
 		}
 	}
