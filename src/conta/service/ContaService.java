@@ -42,12 +42,9 @@ public class ContaService implements ContaRepository{
 		throw new ContaNaoEncontradaException("Conta não encontrada!");
 	}
 
-	public void atualizar(Conta conta, int agencia, int tipo, String titular) {
+	public void atualizar(Conta conta, int agencia, String titular) {
 
-		if (conta.getTipo() != 1 && conta.getTipo() != 2) {
-			throw new EntradaInvalidaException("Tipo de conta inválido!");
-		}
-		conta.atualizar(agencia, tipo, titular);
+		conta.atualizar(agencia, titular);
 	}
 
 	public void deletar(Conta conta) {
@@ -58,6 +55,9 @@ public class ContaService implements ContaRepository{
 	
 		if (conta.getSaldo() > 0f) {
 			throw new RegraDeNegocioException("A conta não pode ser encerrada. Saque todo valor e tente novamente!");
+		}
+		if(conta.getSaldo() < 0f) {
+			throw new RegraDeNegocioException("A conta não pode ser encerrada. Regularize os debitos pendentes: " + conta.getSaldo());
 		}
 		
 		contas.remove(conta);

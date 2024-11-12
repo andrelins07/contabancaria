@@ -2,6 +2,8 @@ package conta.model;
 
 import java.util.Objects;
 
+import conta.exception.SaldoInsuficienteException;
+
 public abstract class Conta {
 
 	private int numero;
@@ -17,13 +19,10 @@ public abstract class Conta {
 		this.titular = titular;
 		this.saldo = saldo;
 	}
-	public void atualizar(int agencia, int tipo, String titular) {
+	public void atualizar(int agencia, String titular) {
 		
 		if(this.agencia != agencia) {
 			this.agencia = agencia;
-		}
-		if(this.tipo != tipo) {
-			this.tipo = tipo;
 		}
 		if(!this.titular.equals(titular)) {
 			this.titular = titular;
@@ -63,7 +62,7 @@ public abstract class Conta {
 			this.setSaldo(saldoArredondado);
 			return true;
 		}
-		return false;
+		throw new SaldoInsuficienteException(this.getSaldo(), valor);
 	}
 
 	public void depositar(float valor) {
