@@ -1,13 +1,17 @@
 package conta.controller;
 
+import conta.exception.EntradaInvalidaException;
 import conta.model.Conta;
+import conta.model.ContaCorrente;
+import conta.model.ContaPoupanca;
 import conta.service.ContaService;
 import conta.util.Cores;
 import conta.util.Leitura;
 
 public class ContaController {
 
-	private int agencia, numeroConta, tipo;
+	private int agencia, numeroConta, tipo, aniversario;
+	private String titular;
 	private ContaService contaService = new ContaService();
 	private Conta conta;
 
@@ -15,13 +19,20 @@ public class ContaController {
 
 		agencia = Leitura.lerInteiro("Digite o numero da agencia: ");
 		numeroConta = Leitura.lerInteiro("Digite o numero da conta:  ");
-		
-		String titular = Leitura.lerString("Digite o nome do titular da conta:  ");
+		titular = Leitura.lerString("Digite o nome do titular da conta:  ");
 		tipo = Leitura.lerInteiro("Digite o tipo da sua conta:\n1 - Conta Corrente | 2 - Conta Poupança\n");
+		
 
-		conta = new Conta(numeroConta, agencia, tipo, titular, 1000f);
-
-		contaService.criarConta(conta);
+		switch(tipo) {
+		case 1 -> conta = (ContaCorrente) new ContaCorrente(numeroConta, agencia, tipo, titular, 0f, 150f);
+		case 2 -> {
+			aniversario = Leitura.lerInteiro("Digite o dia do aniversário da conta: ");
+			conta = (ContaPoupanca) new ContaPoupanca(numeroConta, agencia, tipo, titular, 0f, aniversario);
+		}
+		default -> throw new EntradaInvalidaException("Tipo de conta inválido!");
+		};
+	
+		contaService.cadastrar(conta);
 
 		System.out.println(Cores.TEXT_GREEN + "\nConta cadastrada com sucesso!" + Cores.TEXT_RESET);
 
@@ -29,7 +40,7 @@ public class ContaController {
 	}
 
 	public void listarContas() {
-		contaService.listarContas();
+		contaService.listarTodas();
 	}
 
 	public void listarContaPorNumero() {
@@ -38,15 +49,15 @@ public class ContaController {
 
 	public void atualizarDadosConta() {
 
-		Conta conta = buscarConta();
+		conta = buscarConta();
 		
 		System.out.println("\nAtualizando dados\n");
 		
 		agencia = Leitura.lerInteiro("Digite o numero da nova agencia: ");
-		String titular = Leitura.lerString("Alterando o nome do titular da conta:  ");
+		titular = Leitura.lerString("Alterando o nome do titular da conta:  ");
 		tipo = Leitura.lerInteiro("Alterando o tipo da sua conta:\n1 - Conta Corrente | 2 - Conta Poupança\n");
 		
-		contaService.atualizarDadosConta(conta, agencia, tipo, titular);
+		contaService.atualizar(conta, agencia, tipo, titular);
 
 		System.out.println(Cores.TEXT_GREEN + "Dados atualizados com sucesso!");
 	}
@@ -55,7 +66,7 @@ public class ContaController {
 
 		int opcao;
 
-		Conta conta = buscarConta();
+		conta = buscarConta();
 
 		System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n", conta.getNumero(),
 				conta.getAgencia(), conta.getSaldo(), conta.getTitular());
@@ -67,7 +78,7 @@ public class ContaController {
 	
 		switch (opcao) {
 			case 1 -> {
-				contaService.apagarConta(conta);
+				contaService.deletar(conta);
 				System.out.println(Cores.TEXT_GREEN + "\nConta encerrada com sucesso!");
 			}
 			case 2 -> System.out.println("Operacao cancelada!");
@@ -86,7 +97,7 @@ public class ContaController {
 
 	private void alterarSaldo(String operacao, String perguntaUsuario, String statusOperacao) {
 
-		Conta conta = buscarConta();
+		conta = buscarConta();
 
 		System.out.printf("\nConta: %d | Agencia: %d | Saldo: %.2f | Titular: %s\n", conta.getNumero(),
 				conta.getAgencia(), conta.getSaldo(), conta.getTitular());
@@ -131,7 +142,7 @@ public class ContaController {
 	private Conta buscarConta() {
 		agencia = Leitura.lerInteiro("Digite o numero da agencia: ");
 		numeroConta = Leitura.lerInteiro("Digite o numero da conta:  ");
-		return contaService.listarContaPorNumero(agencia, numeroConta);
+		return contaService.procurarPorNumero(agencia, numeroConta);
 	}
 
 }

@@ -2,7 +2,7 @@ package conta.model;
 
 import java.util.Objects;
 
-public class Conta {
+public abstract class Conta {
 
 	private int numero;
 	private int agencia;
@@ -79,10 +79,10 @@ public class Conta {
 
 		switch (this.tipo) {
 		case 1:
-			tipo = "Conta Corrente";
+			tipo = "CC";
 			break;
 		case 2:
-			tipo = "Conta Poupança";
+			tipo = "CP";
 			break;
 		}
 		System.out.printf("""
@@ -90,7 +90,7 @@ public class Conta {
 		Dados da Conta:
 		****************************************************************
 		Numero da conta: %d | Agência: %d | Tipo da Conta: %s
-		Saldo: %.2f | Titular: %s\n\n""", this.numero, this.agencia, tipo, this.saldo, this.titular);
+		Saldo: %.2f | Titular: %s\n""", this.numero, this.agencia, tipo, this.saldo, this.titular);
 	}
 
 	@Override

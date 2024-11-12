@@ -1,6 +1,7 @@
 package conta.util;
 
 import java.util.Scanner;
+
 import conta.exception.EntradaInvalidaException;
 import conta.exception.EntradaVaziaException;
 
