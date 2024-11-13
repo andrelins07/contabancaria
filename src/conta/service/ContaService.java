@@ -13,7 +13,7 @@ public class ContaService implements ContaRepository {
 	private ArrayList<Conta> contas = new ArrayList<Conta>();
 
 	// CRUD da Conta
-
+	@Override
 	public void cadastrar(Conta conta) {
 
 		if (contas.contains(conta)) {
@@ -21,7 +21,7 @@ public class ContaService implements ContaRepository {
 		}
 		contas.add(conta);
 	}
-
+	@Override
 	public void listarTodas() {
 
 		if (contas.isEmpty())
@@ -32,7 +32,7 @@ public class ContaService implements ContaRepository {
 		contas.forEach(conta -> conta.visualizar());
 
 	}
-
+	@Override
 	public Conta procurarPorNumero(int agencia, int numeroConta) {
 
 		for (Conta conta : contas) {
@@ -47,7 +47,7 @@ public class ContaService implements ContaRepository {
 
 		conta.atualizar(agencia, titular);
 	}
-
+	@Override
 	public void deletar(Conta conta) {
 
 		float saldoArredondado = (float) Math.round(conta.getSaldo() * 100) / 100f;
@@ -64,7 +64,6 @@ public class ContaService implements ContaRepository {
 
 		contas.remove(conta);
 	}
-
 	// Métodos Bancários
 
 	@Override
