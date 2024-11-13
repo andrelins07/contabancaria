@@ -8,6 +8,13 @@ public class ContaPoupanca extends Conta{
 		super(numero, agencia, tipo, titular, saldo);
 		this.aniversario = aniversario;
 	}
+	
+	public ContaPoupanca(ContaDTO dto) {		
+		super(dto.numero(), dto.agencia(), 1,dto.titular(), dto.saldo(), dto.totalTransacoes(),
+				dto.extrato().stream().map(e-> new Transacao(e)).toList());
+		
+		this.aniversario = 0;
+	}
 
 	public int getAniversario() {
 		return aniversario;

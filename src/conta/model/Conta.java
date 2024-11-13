@@ -1,7 +1,6 @@
 package conta.model;
 
-import java.util.Objects;
-
+import java.util.*;
 import conta.exception.SaldoInsuficienteException;
 
 public abstract class Conta {
@@ -11,6 +10,8 @@ public abstract class Conta {
 	private int tipo;
 	private String titular;
 	private float saldo;
+	private ArrayList<Transacao> extrato = new ArrayList<>();;
+	private int totalTransacoes;
 
 	public Conta(int numero, int agencia, int tipo, String titular, float saldo) {
 		this.numero = numero;
@@ -18,15 +19,64 @@ public abstract class Conta {
 		this.tipo = tipo;
 		this.titular = titular;
 		this.saldo = saldo;
+		this.totalTransacoes = 0;
 	}
+	public Conta(int numero, int agencia, int tipo, String titular, float saldo, int totalTransacoes, List<Transacao> transacoes) {
+		this.numero = numero;
+		this.agencia = agencia;
+		this.tipo = tipo;
+		this.titular = titular;
+		this.saldo = saldo;
+		this.totalTransacoes = totalTransacoes;
+		extrato.addAll(transacoes);
+	}
+
+	public boolean sacar(float valor) {
+
+		if (this.saldo >= valor) {
+			float saldoArredondado = (float) Math.round((this.getSaldo() - valor) * 100) / 100f;
+			this.setSaldo(saldoArredondado);
+			setTotalTransacoes();
+			return true;
+		}
+		throw new SaldoInsuficienteException(this.getSaldo(), valor);
+	}
+
+	public void depositar(float valor) {
+
+		float saldoArredondado = (float) Math.round((this.getSaldo() + valor) * 100) / 100f;
+		this.setSaldo(saldoArredondado);
+		setTotalTransacoes();
+	}
+
 	public void atualizar(int agencia, String titular) {
-		
-		if(this.agencia != agencia) {
+
+		if (this.agencia != agencia) {
 			this.agencia = agencia;
 		}
-		if(!this.titular.equals(titular)) {
+		if (!this.titular.equals(titular)) {
 			this.titular = titular;
 		}
+	}
+
+	public void visualizar() {
+
+		String tipo = "";
+
+		switch (this.tipo) {
+		case 1:
+			tipo = "CC";
+			break;
+		case 2:
+			tipo = "CP";
+			break;
+		}
+		System.out.printf("""
+				\n****************************************************************
+				Dados da Conta:
+				****************************************************************
+				Numero da conta: %d | Agência: %d | Tipo da Conta: %s
+				Saldo: %.2f | Titular: %s\n""", this.numero, this.agencia, tipo, this.saldo, this.titular);
 	}
 
 	public int getNumero() {
@@ -52,61 +102,29 @@ public abstract class Conta {
 	public float getSaldo() {
 		return saldo;
 	}
+
 	public void setSaldo(float saldo) {
 		this.saldo = saldo;
 	}
-	public boolean sacar(float valor) {
-		
-		if(this.saldo >= valor) {
-			float saldoArredondado = (float) Math.round((this.getSaldo() - valor )* 100)/100f;
-			this.setSaldo(saldoArredondado);
-			return true;
-		}
-		throw new SaldoInsuficienteException(this.getSaldo(), valor);
+
+	public void novaTranscao(Transacao transacao) {
+		extrato.add(transacao);
 	}
 
-	public void depositar(float valor) {
-		
-		float saldoArredondado = (float) Math.round((this.getSaldo() + valor )* 100)/100f;
-		this.setSaldo(saldoArredondado);
-	
+	public ArrayList<Transacao> getExtrato() {
+		return extrato;
 	}
 
-	public void visualizar() {
-
-		String tipo = "";
-
-		switch (this.tipo) {
-		case 1:
-			tipo = "CC";
-			break;
-		case 2:
-			tipo = "CP";
-			break;
-		}
-		System.out.printf("""
-		\n****************************************************************
-		Dados da Conta:
-		****************************************************************
-		Numero da conta: %d | Agência: %d | Tipo da Conta: %s
-		Saldo: %.2f | Titular: %s\n""", this.numero, this.agencia, tipo, this.saldo, this.titular);
+	public void setExtrato(List<Transacao> extrato) {
+		this.extrato.addAll(extrato);
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(agencia, numero, tipo);
+	public int getTotalTransacoes() {
+		return totalTransacoes;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Conta other = (Conta) obj;
-		return agencia == other.agencia && numero == other.numero;
+	public void setTotalTransacoes() {
+		totalTransacoes++;
 	}
-	
+
 }

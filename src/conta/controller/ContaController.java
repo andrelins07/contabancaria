@@ -20,10 +20,10 @@ public class ContaController {
 		agencia = Leitura.lerInteiro("Digite o numero da agencia: ");
 		numeroConta = Leitura.lerInteiro("Digite o numero da conta:  ");
 		titular = Leitura.lerString("Digite o nome do titular da conta:  ");
-		tipo = Leitura.lerInteiro("Digite o tipo da sua conta:\n1 - Conta Corrente | 2 - Conta Poupança\n");
+		tipo = Leitura.lerInteiro("Digite o tipo da sua conta:\n1 - Conta Corrente | 2 - Conta Poupança: ");
 
 		switch (tipo) {
-		case 1 -> conta = (ContaCorrente) new ContaCorrente(numeroConta, agencia, tipo, titular, 0f, 150f);
+		case 1 -> conta = (ContaCorrente) new ContaCorrente(numeroConta, agencia, tipo, titular, 0f);
 		case 2 -> {
 			aniversario = Leitura.lerInteiro("Digite o dia do aniversário da conta: ");
 			conta = (ContaPoupanca) new ContaPoupanca(numeroConta, agencia, tipo, titular, 0f, aniversario);
@@ -134,6 +134,13 @@ public class ContaController {
 
 		System.out.println(Cores.TEXT_GREEN + "Transferencia realizada com sucesso!\n");
 
+	}
+	
+	public void imprimirExtrato() {
+		
+		conta = buscarConta();
+		
+		contaService.extrato(conta);
 	}
 
 	private Conta buscarConta() {

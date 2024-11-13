@@ -1,17 +1,20 @@
 package conta.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-
 import conta.exception.*;
 import conta.model.Conta;
+import conta.model.Transacao;
 import conta.repository.ContaRepository;
+import conta.util.ManipularJson;
 
-public class ContaService implements ContaRepository{
-
-	private ArrayList<Conta> contas = new ArrayList<Conta>();
+public class ContaService implements ContaRepository {
+	
+	private ManipularJson manipularJson = new ManipularJson();
+	private ArrayList<Conta> contas = manipularJson.carregarList();
 	
 	// CRUD da Conta
-	
+	@Override
 	public void cadastrar(Conta conta) {
 
 		if (contas.contains(conta)) {
@@ -19,7 +22,7 @@ public class ContaService implements ContaRepository{
 		}
 		contas.add(conta);
 	}
-
+	@Override
 	public void listarTodas() {
 
 		if (contas.isEmpty())
@@ -30,7 +33,7 @@ public class ContaService implements ContaRepository{
 		contas.forEach(conta -> conta.visualizar());
 
 	}
-
+	@Override
 	public Conta procurarPorNumero(int agencia, int numeroConta) {
 
 		for (Conta conta : contas) {
@@ -41,12 +44,12 @@ public class ContaService implements ContaRepository{
 		}
 		throw new ContaNaoEncontradaException("Conta não encontrada!");
 	}
-
+	@Override
 	public void atualizar(Conta conta, int agencia, String titular) {
 
 		conta.atualizar(agencia, titular);
 	}
-
+	@Override
 	public void deletar(Conta conta) {
 		
 		float saldoArredondado = (float) Math.round(conta.getSaldo() * 100)/100f;
@@ -62,22 +65,34 @@ public class ContaService implements ContaRepository{
 		
 		contas.remove(conta);
 	}
-	
 	// Métodos Bancários
 	
+	@Override
 	public void sacar(Conta conta, float valorSaque) {
-		
 		conta.sacar(valorSaque);
+		conta.novaTranscao(new Transacao(conta.getTotalTransacoes(), "Saque",valorSaque, LocalDate.now()));
 		
 	}
-
+	@Override
 	public void depositar(Conta conta, float valorDeposito) {
 		conta.depositar(valorDeposito);
+		conta.novaTranscao(new Transacao(conta.getTotalTransacoes(), "Deposito",valorDeposito, LocalDate.now()));
 	}
-
+	@Override
 	public void transferir(Conta contaOrigem, Conta contaDestino, float valor) {
-		sacar(contaOrigem, valor);
-		depositar(contaDestino, valor);
+		contaOrigem.sacar(valor);
+		contaOrigem.novaTranscao(new Transacao(contaOrigem.getTotalTransacoes(), "Transf. Enviada", valor, LocalDate.now()));
+		contaDestino.depositar(valor);
+		contaDestino.novaTranscao(new Transacao(contaDestino.getTotalTransacoes(), "Transf Recebida", valor, LocalDate.now()));
 	}
+	@Override
+	public void extrato(Conta conta) {
+		
+		if(conta.getExtrato().isEmpty()) {
+			throw new RegraDeNegocioException("Nenhuma transacao realizada.");
+		}
+		System.out.printf("EXTRATO BANCARIO -> Conta: %d | Titular: %s\n\n", conta.getNumero(), conta.getTitular());
+		conta.getExtrato().forEach(transacao -> transacao.getTransacao());
 
+	}
 }
