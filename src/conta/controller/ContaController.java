@@ -135,11 +135,21 @@ public class ContaController {
 		System.out.println(Cores.TEXT_GREEN + "Transferencia realizada com sucesso!\n");
 
 	}
+	
+	public void imprimirExtrato() {
+		
+		conta = buscarConta();
+		
+		contaService.extrato(conta);
+	}
 
 	private Conta buscarConta() {
+		
 		agencia = Leitura.lerInteiro("Digite o numero da agencia: ");
 		numeroConta = Leitura.lerInteiro("Digite o numero da conta:  ");
+		
 		return contaService.procurarPorNumero(agencia, numeroConta);
+		
 	}
 
 }

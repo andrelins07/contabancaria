@@ -25,10 +25,12 @@ public class ContaCorrente extends Conta {
 		if (this.getSaldo() + this.getLimite() < valor) {
 			throw new SaldoInsuficienteException(this.getSaldo(), valor);
 		}
-		
 		float saldoArredondado = (float) Math.round((this.getSaldo() - valor )* 100)/100f;
 
 		this.setSaldo(saldoArredondado);
+		
+		this.setTotalTransacoes();
+		
 		return true;
 	}
 

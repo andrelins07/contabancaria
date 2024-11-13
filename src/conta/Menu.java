@@ -25,14 +25,15 @@ public class Menu {
 					6 - Sacar
 					7 - Depositar
 					8 - Transferir valores entre contas
-					9 - Sair
+					9 - Consultar Extrato
+					0 - Sair
 					***************************************************
 					""" + Cores.TEXT_RESET);
 			try {
 				
 				int opcao = Leitura.lerInteiro(Cores.ANSI_BLACK_BACKGROUND + Cores.TEXT_YELLOW + "Digite a opcao Desejada: " + Cores.TEXT_RESET);
 				System.out.println();
-				if (opcao == 9) {
+				if (opcao == 0) {
 					System.out.println("\nBanco do Brazil com Z - O seu Futuro começa aqui!");
 					sobre();
 					break;
@@ -55,6 +56,8 @@ public class Menu {
 				case 7 -> contaController.depositar();
 
 				case 8 -> contaController.transferir();
+				
+				case 9 -> contaController.imprimirExtrato();
 
 				default -> System.out.println("\nOpção Inválida!\n");
 
